@@ -20,12 +20,14 @@ class TunannSpider(scrapy.Spider):
     def pagination_parser(self, response):
         rows = response.css("tr.Tableau1")
         for row in rows:
-            next_entry = row.css("td:nth-child(8) a::attr(href)").extract_first()
+            next_entry = row.css(
+                "td:nth-child(8) a::attr(href)").extract_first()
             if next_entry:
                 next_entry = response.urljoin(next_entry)
                 yield scrapy.Request(next_entry)
         next_page_link = response.xpath(
-            "//img[@src='/images/n_next.gif']/parent::a/@href").extract_first()
+            "//img[@src='/images/n_next.gif']/parent::a/@href").extract_first(
+            )
         if next_page_link:
             next_page_link = response.urljoin(next_page_link)
             yield scrapy.Request(
@@ -34,8 +36,9 @@ class TunannSpider(scrapy.Spider):
     def parse(self, response):
         item = RentAnalysisItem()
         soup = bs(response.body, "lxml")
-        inspect_response(response, self)
-        def filter_tags(tag, col):                      
+
+        # inspect_response(response, self)
+        def filter_tags(tag, col):
             """
                 Return tags that are siblings to tags containing
                 the specified column name in their string
@@ -51,22 +54,21 @@ class TunannSpider(scrapy.Spider):
         created = partial(filter_tags, col="Insérée le")
         edited = partial(filter_tags, col="Modifiée le")
 
-
         if soup.find(category):
-            item["category"] = soup.find(category).get_text()
+            item["category"] = soup.find(category).get_text().strip()
         if soup.find(location):
-            item["location"] = soup.find(location).get_text()
+            item["location"] = soup.find(location).get_text().strip()
         if soup.find(description):
-            item["description"] = soup.find(description).get_text()
+            item["description"] = soup.find(description).get_text().strip()
         if soup.find(address):
-            item["address"] = soup.find(address).get_text()
+            item["address"] = soup.find(address).get_text().strip()
         if soup.find(area):
-            item["area"] = soup.find(area).get_text()
+            item["area"] = soup.find(area).get_text().strip()
         if soup.find(price):
-            item["price"] = soup.find(price).get_text()
+            item["price"] = soup.find(price).get_text().strip()
         if soup.find(created):
-            item["created"] = soup.find(created).get_text()
+            item["created"] = soup.find(created).get_text().strip()
         if soup.find(edited):
-            item["edited"] = soup.find(edited).get_text()
+            item["edited"] = soup.find(edited).get_text().strip()
 
         yield item
