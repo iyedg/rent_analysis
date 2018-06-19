@@ -1,0 +1,48 @@
+digraph {
+    rankdir=LR;
+    df -> area;
+    df -> price;
+    df -> category;
+    df -> location;
+    
+    subgraph cluster_0 {
+        label="Numerical variables";
+        
+        extract_number[label="extract_number()",fillcolor="grey",style="filled"];
+        impute[label="impute()",fillcolor="grey",style="filled"];
+        
+        area -> extract_number;
+        price -> extract_number;
+        extract_number -> impute;
+    }
+    subgraph cluster_1 {
+        label="Categorical variables";
+        
+        category_split_by_char[label="split_by_char()",fillcolor="grey",style="filled"];
+        location_split_by_char[label="split_by_char()",fillcolor="grey",style="filled"];
+        recode[label="recode()",fillcolor="grey",style="filled"];
+        title_case[label="title_case()",fillcolor="grey",style="filled"];
+        
+        category -> category_split_by_char;
+        location -> location_split_by_char;
+        
+        category_split_by_char -> type;
+        category_split_by_char -> transaction_type;
+        category_split_by_char -> estate_type;
+        
+        location_split_by_char -> governorate;
+        location_split_by_char -> delegation;
+        location_split_by_char -> municipality;
+        
+        governorate -> title_case;
+        delegation -> title_case;
+        municipality -> title_case;
+        
+        type -> recode;
+        transaction_type -> recode;
+        estate_type -> recode;
+        
+        transaction_type -> extract_number;
+    }
+        
+}
