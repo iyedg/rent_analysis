@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "rent_analysis"
+version = "0.1.0"
+description = ""
+authors = ["Iyed Ghedamsi <iyed.ghdemsi@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+Scrapy = "^2.5.0"
+bs4 = "^0.0.1"
+
+[tool.poetry.dev-dependencies]
+black = "^20.8b1"
+isort = "^5.8.0"
+pylama = "^7.7.1"
+pdbpp = "^0.10.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
